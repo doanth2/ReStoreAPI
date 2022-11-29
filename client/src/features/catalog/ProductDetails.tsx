@@ -1,8 +1,59 @@
-import {Typography } from "@mui/material";
+import { Divider, Grid, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import { useParams } from "react-router-dom";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { Product } from "../../app/models/product";
+
 export default function ProductDetails() {
+  const { id } = useParams<{ id: string }>();
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get(`https://localhost:5001/api/products/${id}`)
+      .then(response => setProduct(response.data))
+      .catch(error => console.log(error))
+      .finally(() => setLoading(false));
+  }, [id])
+
+  if (loading) return <h3>loading...</h3>
+
+  if (!product) return <h3>Product not found</h3>
+
   return (
-    <Typography variant='h2'>
-        ProductDetails
+    <Grid container spacing={6}>
+      <Grid>
+        <img src={product.pictureUrl} alt={product.name} style={{ width: '100%' }} />
+      </Grid>
+      <Grid item xs={6}>
+        <Typography variant="h3">
+          {product.name}
         </Typography>
+        <Divider sx={{ md: 2 }} />
+        <Typography variant="h3">
+          {(product.price / 100).toFixed(2)}
+        </Typography>
+        <TableContainer>
+          <TableBody>
+            <TableRow>
+              <TableCell>Name</TableCell>
+              <TableCell>{product.name}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Description</TableCell>
+              <TableCell>{product.name}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Type</TableCell>
+              <TableCell>{product.name}</TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell>Brand</TableCell>
+              <TableCell>{product.name}</TableCell>
+            </TableRow>
+          </TableBody>
+        </TableContainer>
+      </Grid>
+    </Grid>
   )
 }

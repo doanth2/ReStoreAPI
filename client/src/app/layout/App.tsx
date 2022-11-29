@@ -21,7 +21,6 @@ function App() {
     })
     const handleThemeChange = () => {
         setDarkMode(!darkMode)
-
     }
     return (
         <ThemeProvider theme={theme}>
